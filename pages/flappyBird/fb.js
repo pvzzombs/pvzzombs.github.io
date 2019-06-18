@@ -66,7 +66,8 @@ function Pipe(){
 	}
 }
 function setup(){
-	createCanvas(300,400);
+	var cv = createCanvas(300,400);
+	cv.parent("canvas");
 	bird = new Bird();
 	pipes = [(new Pipe()), (new Pipe()), (new Pipe())];
 	var $pipe = 0;
