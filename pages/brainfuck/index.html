@@ -28,7 +28,6 @@ font-size: 16px;
 }
 
 #o {
-width: 50px;
 height: 50px;
 }
 
@@ -66,10 +65,20 @@ width: 100%;
           <div id="box18" class="box">0</div>
           <div id="box19" class="box">0</div>
           <div id="box20" class="box">0</div>
+          <div id="box21" class="box">0</div>
+          <div id="box22" class="box">0</div>
+          <div id="box23" class="box">0</div>
+          <div id="box24" class="box">0</div>
+          <div id="box25" class="box">0</div>
+          <div id="box26" class="box">0</div>
+          <div id="box27" class="box">0</div>
+          <div id="box28" class="box">0</div>
+          <div id="box29" class="box">0</div>
+          <div id="box30" class="box">0</div>
         </div>
 
           <br/>
-
+          Status: <span id="status" > idle </span><br />
           Program: <textarea id="code" width="300" height="250"></textarea>
           <br/>
           <input id="o" type="button" onclick="parse()" value="Parse" />
@@ -77,8 +86,6 @@ width: 100%;
           <input id="o" type="button" onclick="pause()" value="Pause" />
           <input id="o" type="button" onclick="ok()" value="Step" />
           <br>
-          <br>
-          Input: <input type="text" id="input"/>
           <br>
           Output:
           <br>
@@ -98,41 +105,64 @@ var program = [];
 var pc = 0;
 var pointer = 0;
 var running;
+var error = false;
+var speed = 50;
+var color = "#7CFF89";
+var status = "idle";
 
 function id($){
   return document.getElementById($);
 }
 
 function right(){
+if(id("box"+(pointer+2)) == undefined){
+      id("output").value += "\nError : Overflow!!! Stopped at memory " + pointer + " on program id " + pc;
+      error = true;
+      return ;
+  }
   id("box"+(pointer+1)).style.background = "white";
-  id("box"+(pointer+2)).style.background = "red";
+  id("box"+(pointer+2)).style.background = color;
 }
 function left(){
+
+  if(id("box"+(pointer)) == undefined){
+      id("output").value += "\nError : Overflow!!! Stopped at memory " + pointer + " on program id " + pc;
+      error = true;
+      return ;
+  }
   id("box"+(pointer+1)).style.background = "white";
-  id("box"+(pointer)).style.background = "red";
+  id("box"+(pointer)).style.background = color;
 }
 function parse(){
+  status = "ready";
+  id("status").innerText = status;
   program = [];
   pointer = 0;
   pc = 0;
+  error = false;
   clearInterval(running);
-  for(var i = 1; i <= 20; i++){
+  for(var i = 1; i <= 30; i++){
     id("box"+i).innerText = 0;
     id("box"+i).style.background = "white";
   }
   id("output").value = "";
-  id("box1").style.background = "red";
-  program = bf(id("code").value, id("input").value.split(""));
+  id("box1").style.background = "#7CFF89";
+  program = bf(id("code").value);
 }
 function ok(){
-if(!program){
-  id("output").value = "Hey, Parse first, before stepping";
-  throw "Error!";
+if(status === "idle"){
+  alert("Parse first!");
+  return ;
+}
+if(error){
+  return ;
 }
 
 var cmd = program[pc];
 if(!cmd){
-  alert("Code Finished!");
+  alert("Compiler Finished");
+  status = "idle";
+  id("status").innerText = status;
   program = [];
   pointer = 0;
   pc = 0;
@@ -156,12 +186,22 @@ switch(cmd.cmd){
   }
   case ">" :{
   right();
+  if(id("box"+(pointer+2)) == undefined){
+      id("output").value += "\nError : Cannot Write!!! Stopped at memory " + pointer + " on program id " + pc;
+      error = true;
+      return ;
+  }
   id("box"+(pointer+2)).innerText = cmd.mem;
   pointer = cmd.pnt;
   break;
   }
   case "<" :{
   left();
+  if(id("box"+(pointer)) == undefined){
+      id("output").value += "\nError : Cannot Write!!! Stopped at memory " + pointer + " on program id " + pc;
+      error = true;
+      return ;
+  }
   id("box"+(pointer)).innerText = cmd.mem;
   pointer = cmd.pnt;
   break;
@@ -189,10 +229,26 @@ switch(cmd.cmd){
 }
 
 function run(){
-  running = setInterval(ok,100);
+  if(status === "idle"){
+    alert("Parse first!");
+  }else if(status === "running"){
+    alert("Already running");
+  }else{
+    status = "running";
+    id("status").innerText = status;
+    running = setInterval(ok,speed);
+  }
 }
 function pause(){
-  clearInterval(running);
+  if(status === "running"){
+    status = "paused";
+    id("status").innerText = status;
+    clearInterval(running);
+  }else if(status === "paused"){
+    alert("Already paused");
+  }else{
+    alert("Not yet running");
+  }
 }
 </script>
 </body>
