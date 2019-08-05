@@ -1,7 +1,15 @@
+//the onclick event
+ 
+window.onload = function(){
+  document.getElementsByTagName('canvas')[0].onclick = function(){
+    bird.dy = flap;
+    return false;
+  }
+}
 //the world
 var player;
 var gravity = 0.3;
-var flap = -5;
+var flap = -6;
 var friction = 0.99;
 var speed = 2;
 var bird;
@@ -105,10 +113,10 @@ function keyTyped() {
   }
   return false;
 }
-function mousePressed() {
+/*function mousePressed() {
   bird.dy = flap;
   return false;
-}
+}*/
 function restartGame(){
 	highScore = (highScore < score) ? score : highScore;
 	score = 0;
