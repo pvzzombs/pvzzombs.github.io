@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+   <head>
+       <title> Eval calculator</title>
+       <script src="src/arb.0.0.9.min.js"></script>
+       <script src="src/calc.js"></script>
+       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+       <link rel="stylesheet" href="materialize/css/mi.css"/>
+       <link rel="stylesheet" href="materialize/css/materialize.min.css"/>
+       <script src="src/jquery.js"></script>
+       <script src="index.js"></script>
+   </head>
+   <body class="container">
+      <br />
+      <br />
+      <div id="loading">
+        <div class="row progress">
+          <div class="col s12 indeterminate"></div>
+        </div>
+      </div>
+      <form name="calculator" id="app" style="display: none;">
+            <div class="row">
+               <div class="col s12">
+                  <input class="" type="text" id="display" name="display"/>
+                  <label for="display"><i class="material-icons">keyboard</i></label>
+               </div>
+            </div>
+            <div class="row">
+               <a class="waves-effect waves-light btn col s3 deep-purple accent-2" onclick="calculator.display.value += '1'"><i class="material-icons left">input</i>1</a>
+               <a class="waves-effect waves-light btn col s3 cyan lighten-1" onclick="calculator.display.value += '2'"><i class="material-icons left">input</i>2</a>
+               <a class="waves-effect waves-light btn col s3 green lighten-2" onclick="calculator.display.value += '3'"><i class="material-icons left">input</i>3</a>
+               <a class="waves-effect waves-light btn col s3 teal darken-1" class="operator" onclick="calculator.display.value += '+'"><i class="material-icons left">input</i>+</a>
+            </div>
+            <div class="row">
+               <a class="waves-effect waves-light btn col s3 cyan darken-4" onclick="calculator.display.value += '4'"><i class="material-icons left">input</i>4</a>
+               <a class="waves-effect waves-light btn col s3 blue accent-4" onclick="calculator.display.value += '5'"><i class="material-icons left">input</i>5</a>
+               <a class="waves-effect waves-light btn col s3 indigo darken-1" onclick="calculator.display.value += '6'"><i class="material-icons left">input</i>6</a>
+               <a class="waves-effect waves-light btn col s3 purple accent-1" class="operator" onclick="calculator.display.value += '-'"><i class="material-icons left">input</i>-</a>
+            </div>
+            <div class="row">
+                <a class="waves-effect waves-light btn col s3 light-blue accent-3" onclick="calculator.display.value += '7'"><i class="material-icons left">input</i>7</a>
+                <a class="waves-effect waves-light btn col s3 green accent-3" onclick="calculator.display.value += '8'"><i class="material-icons left">input</i>8</a>
+                <a class="waves-effect waves-light btn col s3 yellow lighten-1" onclick="calculator.display.value += '9'"><i class="material-icons left">input</i>9</a>
+                <a class="waves-effect waves-light btn col s3 deep-orange" class="operator" onclick="calculator.display.value += '*'"><i class="material-icons left">input</i>*</a>
+            </div>
+            <div class="row">
+               <a class="waves-effect waves-light btn col s2 brown" onclick="calculator.display.value = ''"><i class="material-icons">clear</i></a>
+               <a class="waves-effect waves-light btn col s2 cyan darken-2" onclick="calculator.display.value += '.'">.</a>
+               <a class="waves-effect waves-light btn col s2 lime darken-4" onclick="calculator.display.value += '0'">0</a>
+               <a class="waves-effect waves-light btn col s3 light-green accent-4" onclick="calculator.display.value = compute(calculator.display.value)"><i class="material-icons left">input</i>=</a>
+               <a class="waves-effect waves-light btn col s3 indigo accent-4" class="operator" onclick="calculator.display.value += '/'"><i class="material-icons left">input</i>/</a>
+            </div>
+        </div>
+      </form>
+        <a class="right btn btn-floating waves-effect waves-light red modal-trigger" id="add" href="#modal1"><i class="material-icons">help</i></a>
+        <div id="modal1" class="modal">
+          <div class="modal-content">
+            <h4>Help</h4>
+            <p>The Eval Calculator calculates numbers up tp 200 digits. Only the division has a problem of being slow. All works fine. If you have found a bug, please contact me :</p>
+            <p class="col s12"><i class="material-icons left">email</i>Gmail: pvzzombs@gmail.com</p>
+          </div>
+          <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Ok</a>
+          </div>
+        </div>
+       <script src="materialize/js/materialize.min.js"></script>
+   </body>
+</html>
