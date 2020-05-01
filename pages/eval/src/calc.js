@@ -30,7 +30,7 @@ var chars = {
     prec: 4
   },
   "number": function (n) {
-    if (!isNaN(n) && isFinite(n)) {
+    if (/^[+-]?((\d+(\.\d*)?)|(\.\d+))$/.test(n)) {
       return {
         type: "Literal",
         value: n + ''
