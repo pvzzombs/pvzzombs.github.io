@@ -39,9 +39,11 @@ $("document").ready(function(){
         if(b[0] === "\n"){
           var ot = compute(tmp);
           $("#display").val(ot);
+          M.textareaAutoResize($("#display"));
         }
     }catch(e){
     	$("#display").val(e);
+      M.textareaAutoResize($("#display"));
     }
   });
 });
