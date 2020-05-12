@@ -3,11 +3,22 @@ function compute(string){
   var ans = Eval(string);
   document.getElementById('history').innerText += " = " + ans;
   return ans;
+  M.textareaAutoResize($("#display"));
+}
+
+function calcBt(val){
+  if(val === 'C'){
+    document.calculator.display.value = "";
+  }else{
+    document.calculator.display.value += val;
+  }
+  M.textareaAutoResize($("#display"));
 }
 
 function backspace(){
   var temp = document.calculator.display.value;
   document.calculator.display.value = temp.substr(0, temp.length -1);
+  M.textareaAutoResize($("#display"));
 }
 $("document").ready(function(){
   function getParameterByName(name, url) {
@@ -23,6 +34,7 @@ $("document").ready(function(){
   var u = (getParameterByName("display"));
   if(u !== null && u !== "") {
     document.calculator.display.value = compute(u);
+    M.textareaAutoResize($("#display"));
   }
 
   $("#loading").hide();
