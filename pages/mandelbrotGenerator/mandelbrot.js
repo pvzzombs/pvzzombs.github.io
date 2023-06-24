@@ -4,8 +4,15 @@ var a, b, c, canvas, rect;
 //zoomon click
 var zoomOnClick = true;
 
-//if running
-var running = false;
+//Use to store setTimeout IDs
+var mdb0, mdb1, mdb2, mdb3;
+
+//Store setInterval IDs
+var iID;
+var iIDs = [null, null, null];
+
+//animation ID
+var animID;
 
 //to prevent error during loading, make sure that
 //the canvas is loaded first before calling any methods
@@ -16,9 +23,10 @@ b = canvas.height;
 
 //when canvas is clicked, call drawOnClick function
 canvas.onclick = function(e){
-  setTimeout(function(){
+  /*setTimeout(function(){
 	drawOnClick(e);
-  }, 10)
+  }, 10)*/
+  drawOnClick(e);
 }
 
 //changes the mandelbrot set based on mouse clicks
@@ -69,8 +77,10 @@ rect = canvas.getBoundingClientRect()
   }
   
   show();
-  requestAnimationFrame(abortRun);
-  requestAnimationFrame(startRun);
+  //requestAnimationFrame(abortRun);
+  //requestAnimationFrame(startRun);
+  abortRun();
+  startRun();
 }
 //when + was clicked above the canvas
 function plus(){
@@ -83,17 +93,40 @@ function minus(){
 
 //aborts startRun
 function abortRun(){
-  if(running){running = false}
+  clearInterval(iIDs[0]);
+  clearInterval(iIDs[1]);
+  clearInterval(iIDs[2]);
+  clearTimeout(mdb1);
+  clearTimeout(mdb2);
+  clearTimeout(mdb3);
 }
 
 //starts calling mandelbrot
 function startRun(){
-  //(function(){
-	  setTimeout(function(){running = true}, 10);
-	  setTimeout(function(){mandelbrot(zooms, panX, panY, 8)}, 10);
-	  setTimeout(function(){mandelbrot(zooms, panX, panY, 5)}, 20);
-	  setTimeout(function(){mandelbrot(zooms, panX, panY, 1)}, 30);
-  //})()
+  /*mdb1 = setTimeout(function(){mandelbrot(zooms, panX, panY, 8, 0, function(){
+    mdb2 = setTimeout(function(){mandelbrot(zooms, panX, panY, 5, 1, function(){
+      mdb3 = setTimeout(function(){mandelbrot(zooms, panX, panY, 1, 2, function(){
+        console.log("Done...");
+      })});
+    })});
+  })});*/
+  /*mdb1 = setTimeout(function(){
+    mandelbrot(zooms, panX, panY, 8, 0);
+    mdb2 = setTimeout(function(){
+      mandelbrot(zooms, panX, panY, 5, 1);
+      mdb3 = setTimeout(function(){
+        mandelbrot(zooms, panX, panY, 1, 2);
+      });
+    });
+  });*/
+  
+  mdb1 = setTimeout(function(){mandelbrot(zooms, panX, panY, 8, 0)});
+  mdb2 = setTimeout(function(){mandelbrot(zooms, panX, panY, 5, 1)});
+  mdb3 = setTimeout(function(){mandelbrot(zooms, panX, panY, 1, 2)});
+  
+  //mandelbrot(zooms, panX, panY, 8, 0)
+  //mandelbrot(zooms, panX, panY, 5, 1)
+  //mandelbrot(zooms, panX, panY, 1, 2)
 }
 //in the instance, create all thngs
 try{
@@ -116,22 +149,66 @@ pallete.setNumberRange(0,maxI);
 //pallete for smoothColoring
 var _pallete = ["#000764","#206bcb","#edffff","#ffaa00","#000200"];
 
+// mandelbrot helper function
+function mdbl(px, py, x, y, zm, panX, panY, scale){
+  for(py = 0; py < b; py+=scale){
+
+    //zoom factors
+    x0 = panX + px/zm;
+    y0 = panY + py/zm;
+  
+    var x = 0;
+    var y = 0;
+  
+    var i = 0;
+    var xtemp;
+  
+    while (x*x + y*y <= 4  &&  i < maxI) {
+      //ticks++
+      xtemp = x*x - y*y + x0
+      y = 2*x*y + y0
+      x = xtemp
+      i = i + 1
+    }
+  
+    //coloring
+    if("smoothColoring" === coloringType){
+      if(i < maxI){
+        log_zn = Math.log(x*x + y*y)/2
+        nu = Math.log( log_zn / Math.log(2) ) / Math.log(2);
+        i = i + 1 - nu;
+        c.fillStyle = color(i / maxI * (_pallete.length - 1));
+        c.fillRect(px, py, scale, scale);
+        //c.stroke();
+      }else{
+        c.fillStyle = "black";
+        c.fillRect(px, py, scale, scale);
+        //c.stroke();
+      }
+    }else{
+      c.fillStyle = color(i);
+      c.fillRect(px, py, scale, scale);
+      //c.stroke();
+    }
+  //console.log(px  + ", " + py);
+  }
+  //console.log(c.fillStyle);
+  //c.fillStyle = "#ff0000";
+  //c.fillRect(0,0,400,400);
+}
+
 //function that draws the mandelbrot set
 // based on current zoom, panX, panY and scale
 
 /***********************MANDELBROT*********************************/
 /******************************************************************/
-function mandelbrot(zm, panX, panY, scale){
-//cncel run in some case
-if(!running){
-	return;
-}
-if(scale === 1){
-  running = false;
-}
+function mandelbrot(zm, panX, panY, scale, arrayIndex, func){
+//cancel run in some case
+
 scale = scale || 1;
 //reset ticks
 ticks = 0;
+func = func || (function(){});
 //px - Canvas x
 //py - canvas y
 //x - real x
@@ -141,45 +218,28 @@ var px, py, x, y;
 
 //loop from y's, then loop all x's
 
-for(px = 0; px < a; px+=scale){
-  for(py = 0; py < b; py+=scale){
-    //zoom factors
-	x0 = panX + px/zm;
-	y0 = panY + py/zm;
-	
-	var x = 0;
-	var y = 0;
-	
-	var i = 0;
-    var xtemp;
-    
-	while (x*x + y*y <= 4  &&  i < maxI) {
-	  ticks++
-	  xtemp = x*x - y*y + x0
-	  y = 2*x*y + y0
-	  x = xtemp
-   	  i = i + 1
-	}
-	
-	//coloring
-	if("smoothColoring" === coloringType){
-		if(i < maxI){
-		  log_zn = Math.log(x*x + y*y)/2
-		  nu = Math.log( log_zn / Math.log(2) ) / Math.log(2);
-	      i = i + 1 - nu;
-		  c.fillStyle = color(i / maxI * (_pallete.length - 1));
-		  c.fillRect(px, py, scale, scale);
-		}else{
-		  c.fillStyle = "black";
-		  c.fillRect(px, py, scale, scale);
-		}
-	  }else{
-		c.fillStyle = color(i);
-		c.fillRect(px, py, scale, scale);
-	  }
-	}
-}
-console.log("Total ticks: " + ticks + ", based on scale " + scale);
+/*for(px = 0; px < a; px+=scale){
+  animID = requestAnimationFrame(function(){
+    mdbl(px, py, x, y, zm, panX, panY, scale);
+  });
+}*/
+
+//clearInterval(iID);
+
+px = 0;
+
+iIDs[arrayIndex] = setInterval(function(){
+  if(px < a){
+    mdbl(px, py, x, y, zm, panX, panY, scale);
+    px += scale;
+  }else{
+    clearInterval(iIDs[arrayIndex]);
+    func();
+  }
+}, 50);
+
+//cancelAnimationFrame(animID);
+//console.log("Total ticks: " + ticks + ", based on scale " + scale);
 }
 /******************************************************************/
 /******************************************************************/
