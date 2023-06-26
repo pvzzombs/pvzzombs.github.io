@@ -58,31 +58,8 @@ function drawOnClick(e) {
   document.getElementById("ya").value = panY;
   document.getElementById("za").value = zooms;
   pallete.setNumberRange(0, maxI);
-  /*if(0 < zooms && zooms < 50) {
-    pallete.setNumberRange(0, 50);
-    maxI = 50;
-  } else if(50 < zooms && zooms < 100) {
-    pallete.setNumberRange(0, 100);
-    maxI = 100;
-  } else if(100 < zooms && zooms < 1000) {
-    pallete.setNumberRange(0, 255);
-    maxI = 255;
-  } else if(1000 < zooms && zooms < 10000) {
-    pallete.setNumberRange(0, 500);
-    maxI = 500;
-  } else if(10000 < zooms && zooms < 100000) {
-    pallete.setNumberRange(0, 750);
-    maxI = 750;
-  } else if(100000 < zooms && zooms < 1000000) {
-    pallete.setNumberRange(0, 1000);
-    maxI = 1000;
-  } else if(1000000 < zooms && zooms < 10000000) {
-    pallete.setNumberRange(0, 2500);
-    maxI = 2500;
-  }*/
+  
   show();
-  //requestAnimationFrame(abortRun);
-  //requestAnimationFrame(startRun);
   abortRun();
   startRun();
 }
@@ -118,25 +95,6 @@ function startRun() {
       })});
     })});
   })});*/
-  /*mdb1 = setTimeout(function(){
-    mandelbrot(zooms, panX, panY, 8, 0);
-    mdb2 = setTimeout(function(){
-      mandelbrot(zooms, panX, panY, 5, 1);
-      mdb3 = setTimeout(function(){
-        mandelbrot(zooms, panX, panY, 1, 2);
-      });
-    });
-  });*/
-  /*mdb1 = setTimeout(function() {
-    mandelbrot(zooms, panX, panY, 8, 0)
-  });
-  mdb2 = setTimeout(function() {
-    mandelbrot(zooms, panX, panY, 5, 1)
-  });
-  mdb3 = setTimeout(function() {
-    mandelbrot(zooms, panX, panY, 1, 2)
-  });*/
-  
   function mandelbrotCallFactory(i){
     return function(){
       mandelbrot(zooms, panX, panY, pixelSizes[i], i);
@@ -146,9 +104,6 @@ function startRun() {
     mandelbrotCalls[i] = setTimeout(mandelbrotCallFactory(i));
     //console.log(i);
   }
-  //mandelbrot(zooms, panX, panY, 8, 0)
-  //mandelbrot(zooms, panX, panY, 5, 1)
-  //mandelbrot(zooms, panX, panY, 1, 2)
 }
 //in the instance, create all thngs
 //pan is the length of scroll
@@ -193,22 +148,15 @@ function mdbl(px, py, x, y, zm, panX, panY, scale) {
         i = i + 1 - nu;
         c.fillStyle = color(i / maxI * (_pallete.length - 1));
         c.fillRect(px, py, scale, scale);
-        //c.stroke();
       } else {
         c.fillStyle = "black";
         c.fillRect(px, py, scale, scale);
-        //c.stroke();
       }
     } else {
       c.fillStyle = color(i);
       c.fillRect(px, py, scale, scale);
-      //c.stroke();
     }
-    //console.log(px  + ", " + py);
   }
-  //console.log(c.fillStyle);
-  //c.fillStyle = "#ff0000";
-  //c.fillRect(0,0,400,400);
 }
 //function that draws the mandelbrot set
 // based on current zoom, panX, panY and scale
@@ -226,13 +174,6 @@ function mandelbrot(zm, panX, panY, scale, arrayIndex) {
   //x - real x
   //y - imaginary y
   var px, py, x, y;
-  //loop from y's, then loop all x's
-  /*for(px = 0; px < a; px+=scale){
-    animID = requestAnimationFrame(function(){
-      mdbl(px, py, x, y, zm, panX, panY, scale);
-    });
-  }*/
-  //clearInterval(iID);
   px = 0;
   if(useInterval){
     drawColumnIDs[arrayIndex] = setInterval(function(){
@@ -241,10 +182,8 @@ function mandelbrot(zm, panX, panY, scale, arrayIndex) {
         px += scale;
       }else{
         clearInterval(drawColumnIDs[arrayIndex]);
-        //func();
       }
     });
-    //console.log("Called here " + arrayIndex);
   }else{
     function drawStep() {
       if(px < a) {
@@ -253,21 +192,10 @@ function mandelbrot(zm, panX, panY, scale, arrayIndex) {
         drawColumnIDs[arrayIndex] = requestAnimationFrame(drawStep);
       } else {
         cancelAnimationFrame(drawColumnIDs[arrayIndex]);
-        //func();
       }
     }
     drawColumnIDs[arrayIndex] = requestAnimationFrame(drawStep);
   }
-  /*iIDs[arrayIndex] = setInterval(function(){
-    if(px < a){
-      mdbl(px, py, x, y, zm, panX, panY, scale);
-      px += scale;
-    }else{
-      clearInterval(iIDs[arrayIndex]);
-      func();
-    }
-  });*/
-  //cancelAnimationFrame(animID);
   //console.log("Total ticks: " + ticks + ", based on scale " + scale);
 }
 /******************************************************************/
@@ -379,16 +307,7 @@ function zoomIn() {
   zooms = zooms + zf;
   pan = (panX + 2 / zooms) - (panX - 1 / zooms);
   document.getElementById("za").value = zooms;
-  /*if(0 < zooms && zooms < 100) {
-    pallete.setNumberRange(0, 100);
-    maxI = 100;
-  } else if(100 < zooms && zooms < 1000) {
-    pallete.setNumberRange(0, 255);
-    maxI = 255;
-  } else if(1000 < zooms && zooms < 10000) {
-    pallete.setNumberRange(0, 500);
-    maxI = 500;
-  }*/
+
   show();
   abortRun();
   startRun();
@@ -398,16 +317,7 @@ function zoomOut() {
   zooms = zooms - zf;
   pan = (panX + 2 / zooms) - (panX - 1 / zooms)
   document.getElementById("za").value = zooms;
-  /*if(zooms < 100) {
-    pallete.setNumberRange(0, 50);
-    maxI = 50;
-  } else if(zooms > 100 && zooms < 1000) {
-    pallete.setNumberRange(0, 100);
-    maxI = 100;
-  } else if(zooms > 1000 && zooms < 10000) {
-    pallete.setNumberRange(0, 255);
-    maxI = 255;
-  }*/
+
   show();
   abortRun();
   startRun();
@@ -468,6 +378,8 @@ function changeCoords() {
   zooms = parseFloat(temp[2]);
   maxI = parseFloat(temp[3]);
   zf = 1.5;
+  pan = (panX + 2 / zooms) - (panX - 1 / zooms);
+  
   pallete.setNumberRange(0, maxI);
   document.getElementById("xa").value = panX;
   document.getElementById("ya").value = panY;
