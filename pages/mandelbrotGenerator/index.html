@@ -1,136 +1,125 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>Mandelbrot in HTML5 Javascript</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#157878">
-  <link rel="stylesheet" href="../../css/normalize.css">
-  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="../../css/cayman.css">
-<script src="rainbowvis.js"></script>
-<!-- script src="../js/eruda.js"></script>
-<script>eruda.init();</script -->
-<style type="text/css">
-#trigger, #xp, #yp, #xz, #xm, #ym, #yz, #zfb{
-  height: 50px;
-  width: 60px;
-}
-#xa, #ya, #za, #zf, #mi{
-  height: 50px;
-  width: 70px;
-}
-#dtls{
-  border: 1px solid black;
-  width: 300px;
-  height: 150px;
-}
-#clrt, #lrg{
-  border: 1px solid black;
-  width:125px;
-  height: 50px;
-}
-tr{
-  text-align: center;
-}
-#main{
-  border: 1px solid black;
-}
-#plt, #crd{
-  border: 1px solid black;
-  width: 200px;
-  height: 50px;
-}
-</style>
-</head>
-<body>
+  <head>
+    <title>Mandelbrot in HTML5 Javascript</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <link rel="stylesheet" href="../../css/normalize.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="../../css/cayman.css">
+    <script src="rainbowvis.js"></script>
+    <!-- script src="../js/eruda.js"></script>
+      <script>eruda.init();</script -->
+    <style type="text/css">
+      #trigger, #xp, #yp, #xz, #xm, #ym, #yz, #zfb{
+      height: 50px;
+      /*width: 60px;*/
+      }
+      #xa, #ya, #za, #zf, #mi{
+      height: 50px;
+      width: 70px;
+      }
+      #dtls{
+      border: 1px solid black;
+      width: 100%;
+      /*height: 150px;*/
+      }
+      #clrt, #lrg{
+      border: 1px solid black;
+      /*width:125px;*/
+      height: 50px;
+      }
+      #plt, #crd{
+      border: 1px solid black;
+      width: 100%;
+      height: 50px;
+      }
+      #canvasWrapper{
+      width: 100%;
+      max-width: 400px;
+      margin: 0px auto;
+      }
+      body{
+      text-align:center;
+      }
+    </style>
+  </head>
+  <body>
     <section class="page-header">
       <h1 class="project-name">Contents List</h1>
       <a href="../../index.html" class="btn">Main Menu</a>
     </section>
-
     <section class="main-content">
-<p>
-A mandelbrot set generator using pure javascript.
-Uses rainbow-vis.js for pallete and coloring.
-</p>
-<table id="main" border="1">
-<tbody>
-<tr>
-    <td>
-	<input type="button" id="trigger" value="+" onclick="plus()"/>
-	<input type="button" id="trigger" value="-" onclick="minus()"/>
-	<input type="button" id="trigger" value="RESET" onclick="work()"/>
-	<input type="button" id="trigger" value="Re-draw" onclick="drawAgain()"/>
-	<input type="button" id="trigger" value="Resize" onclick="resize()"/>
-	<input type="button" id="trigger" value=" ? " onclick="about()"/>
-	</td>
-	<td rowspan="2" width="306">
-	<p>Mandelbrot Set Generator</p>
-	x-axis: <input type="text" id="xa" value="-2.5"/>
-	<input type="button" id="xp" value="+" onclick="xScroll(1)"/>
-	<input type="button" id="xm" value="-" onclick="xScroll(0)"/>
-	<br/>
-	<br/>
-	y-axis: <input type="text" id="ya" value="-2"/>
-	<input type="button" id="yp" value="+" onclick="yScroll(1)"/>
-	<input type="button" id="ym" value="-" onclick="yScroll(0)"/>
-	<br/>
-	<br/>
-	zoom: <input type="text" id="za" value="100"/>
-	<input type="button" id="xz" value="+" onclick="zoomIn()"/>
-	<input type="button" id="yz" value="-" onclick="zoomOut()"/>
-	<br />
-	<!-- input type="button" id="lrg" value="Change" onclick="zoom()"/ -->
-	<br />
-	<br />
-	zoom-factor: <input type="text" id="zf" value="1.5"/>
-	<input type="button" id="zfb" value="Change" onclick="zoomFactor()"/>
-	<br />
-	<br />
-	iteration: <input type="text" id="mi" value="50"/>
-	<input type="button" id="trigger" value="Change" onclick="changeMaxI()"/>
-	<br />
-	<br />
-	pallete(Use space as delimiter):
-	<br/>
-	<textarea id="plt" width="150">red orange yellow black</textarea>
-	<input type="button" id="lrg" value="Change pallete" onclick="changePallete()"/>	
-	<br />
-	<br />
-	coloringType: <input type="button" id="clrt" value="smoothColoring" onclick="changeColoringType()"/>
-	<br />
-	<br />
-	<p>update coords(Use space as delimiter): panX &lt;space&gt; panY &lt;space&gt; zoom &lt;space&gt; maxIterations</p>
-	<textarea id="crd" width="150">-0.7253464660778749 0.2520240908085526 18892488895.231102 2500</textarea>
-	<input type="button" id="lrg" value="Update Coords" onclick="changeCoords()"/>
-	<br />
-	<p> Advance Details: </p>
-	<div id="dtls">
-	Start by clicking the reset button.<br />
-	Available palletes: <br />
-	#000764 #206bcb #edffff #ffaa00 #000200<br/>
-	red orange yellow green blue indigo violet black<br />
-	white black white black<br />
-	</div>
-	</td>
-</tr>
-<tr>
-	<td>
-	<canvas id="paper" width="400" height="400"></canvas>
-	<script src="mandelbrot.js"></script>
-	</td>
-</tr>
-</tbody>
-</table>
-<br />
-<p style="font-size: 10px">pvzzombs 2019</p>
+      <p>
+        A mandelbrot set generator using pure javascript.
+        Uses rainbow-vis.js for pallete and coloring.
+      </p>
+      <p>Mandelbrot Set Generator</p>
+      <div id="canvasWrapper">
+        <canvas id="paper"></canvas>
+      </div>
+      <input type="button" id="trigger" value="+" onclick="plus()"/>
+      <input type="button" id="trigger" value="-" onclick="minus()"/>
+      <input type="button" id="trigger" value="RESET" onclick="work()"/>
+      <input type="button" id="trigger" value="Re-draw" onclick="drawAgain()"/>
+      <input type="button" id="trigger" value="Resize" onclick="resize()"/>
+      <input type="button" id="trigger" value=" ? " onclick="about()"/>
+      <br/>
+      <br/>
+      x-axis: <input type="text" id="xa" value="-2.5"/>
+      <input type="button" id="xp" value="+" onclick="xScroll(1)"/>
+      <input type="button" id="xm" value="-" onclick="xScroll(0)"/>
+      <br/>
+      <br/>
+      y-axis: <input type="text" id="ya" value="-2"/>
+      <input type="button" id="yp" value="+" onclick="yScroll(1)"/>
+      <input type="button" id="ym" value="-" onclick="yScroll(0)"/>
+      <br/>
+      <br/>
+      zoom: <input type="text" id="za" value="100"/>
+      <input type="button" id="xz" value="+" onclick="zoomIn()"/>
+      <input type="button" id="yz" value="-" onclick="zoomOut()"/>
+      <br />
+      <!-- input type="button" id="lrg" value="Change" onclick="zoom()"/ -->
+      <br />
+      <br />
+      zoom-factor: <input type="text" id="zf" value="1.5"/>
+      <input type="button" id="zfb" value="Change" onclick="zoomFactor()"/>
+      <br />
+      <br />
+      iteration: <input type="text" id="mi" value="50"/>
+      <input type="button" id="trigger" value="Change" onclick="changeMaxI()"/>
+      <br />
+      <br />
+      pallete(Use space as delimiter):
+      <br/>
+      <textarea id="plt" width="150">red orange yellow black</textarea>
+      <input type="button" id="lrg" value="Change pallete" onclick="changePallete()"/>	
+      <br />
+      <br />
+      coloringType: <input type="button" id="clrt" value="smoothColoring" onclick="changeColoringType()"/>
+      <br />
+      <br />
+      <p>update coords(Use space as delimiter): panX &lt;space&gt; panY &lt;space&gt; zoom &lt;space&gt; maxIterations</p>
+      <textarea id="crd" width="150">-0.7253464660778749 0.2520240908085526 18892488895.231102 2500</textarea>
+      <input type="button" id="lrg" value="Update Coords" onclick="changeCoords()"/>
+      <br />
+      <p> Advance Details: </p>
+      <div id="dtls">
+      Start by clicking the reset button.<br />
+      Available palletes: <br />
+      #000764 #206bcb #edffff #ffaa00 #000200<br/>
+      red orange yellow green blue indigo violet black<br />
+      white black white black<br />
+      </div>
+      <br />
+      <p style="font-size: 10px">pvzzombs 2019</p>
       <footer class="site-footer">
         <span class="site-footer-owner">Miles Jamon (c) 2019</span>
         <span class="site-footer-credits">This uses the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a></span>
         <span class="site-footer-credits">and this page was generated by <a href="https://pages.github.com">GitHub Pages</a>.</span>
       </footer>
-
     </section>
-
-</body>
+    <script src="mandelbrot.js"></script>
+  </body>
 </html>

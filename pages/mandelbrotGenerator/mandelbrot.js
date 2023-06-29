@@ -13,6 +13,13 @@ var drawColumnIDs = new Array(pixelSizes.length);
 //to prevent error during loading, make sure that
 //the canvas is loaded first before calling any methods
 canvas = document.getElementById("paper");
+
+var canvasWrapper = document.getElementById("canvasWrapper");
+canvas.width = canvasWrapper.clientWidth;
+//This is not set to clientHeight so that
+//the canvas is square
+canvas.height = canvasWrapper.clientWidth;
+
 c = canvas.getContext("2d");
 a = canvas.width;
 b = canvas.height;
