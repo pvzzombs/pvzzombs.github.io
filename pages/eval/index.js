@@ -3,21 +3,42 @@ function compute(string){
   var ans = Eval(string);
   document.getElementById('history').innerText += " = " + ans;
   return ans;
-  M.textareaAutoResize($("#display"));
+  //M.textareaAutoResize($("#display"));
+}
+
+function computeAnswer(){
+  //$("#display").val(12)
+  var str = $("#display").val();
+  var ans = Eval(str);
+  $("#display").val(ans);
+  $("#display").focus();
+  $("#display").blur();
+  //document.getElementById('history').innerText += "\n >>> " + str;
+  $("#history").text($("#history").text() + "\n >>> " + str);
+  //document.getElementById('history').innerText += " = " + ans;
+  $("#history").text($("#history").text() + " = " + ans);
 }
 
 function calcBt(val){
   if(val === 'C'){
-    document.calculator.display.value = "";
+    //document.calculator.display.value = "";
+    $("#display").val("");
   }else{
-    document.calculator.display.value += val;
+    //document.calculator.display.value += val;
+    $("#display").val($("#display").val() + val);
   }
+  $("#display").focus();
+  $("#display").blur();
   M.textareaAutoResize($("#display"));
 }
 
 function backspace(){
-  var temp = document.calculator.display.value;
-  document.calculator.display.value = temp.substr(0, temp.length -1);
+  //var temp = document.calculator.display.value;
+  var temp = $("#display").val();
+  //document.calculator.display.value = temp.substr(0, temp.length -1);
+  $("#display").val(temp.substr(0, temp.length -1));
+  $("#display").focus();
+  $("#display").blur();
   M.textareaAutoResize($("#display"));
 }
 $("document").ready(function(){

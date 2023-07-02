@@ -61,7 +61,7 @@
                <a class="waves-effect waves-light btn col s2 brown" onclick="calcBt('C')">C</a>
                <a class="waves-effect waves-light btn col s2 cyan darken-2" onclick="calcBt('.')">.</a>
                <a class="waves-effect waves-light btn col s2 lime darken-4" onclick="calcBt('0')">0</a>
-               <a class="waves-effect waves-light btn col s2 light-green accent-4" onclick="calculator.display.value = compute(calculator.display.value)">=</a>
+               <a class="waves-effect waves-light btn col s2 light-green accent-4" onclick="computeAnswer()">=</a>
                <a class="waves-effect waves-light btn col s2 indigo accent-4" class="operator" onclick="calcBt('/')">/</a>
             </div>
         </div>
@@ -78,7 +78,7 @@
           </div>
         </div>
         <div class="row">
-        	<p id="history"> History will go here: </p>
+        	<p id="history" style="white-space: pre-line;"> History will go here: </p>
         </div>
        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
    <!-- End of body -->
