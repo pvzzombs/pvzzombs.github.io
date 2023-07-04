@@ -62,12 +62,13 @@
       }
       return temp;
     };
-    sha256TOOLS.UTF8Encode = function(str){
-      str = str.replace(/\r\n/g, "\n");
+    /*sha256TOOLS.UTF8Encode = function(str){
+      //str = str.replace(/\r\n/g, "\n");
       var utf8text = "";
       var i, length = str.length;
       for(i = 0; i < length; i++){
         var char = str.charCodeAt(i);
+        console.log(char);
 
         if(char < 128){
           utf8text += String.fromCharCode(char);
@@ -82,6 +83,15 @@
       }
 
       return utf8text;
+    };*/
+    sha256TOOLS.UTF8Encode = function(str){
+      const enc = new TextEncoder('utf-8');
+      const u8s = enc.encode(str);
+      var output = "";
+      for(var i=0; i<u8s.length; i++){
+        output += String.fromCharCode(u8s[i]);
+      }
+      return output;
     };
     //////////////////////////////////////////////////////
     var sha256 = (sha256 || function sha256(string){

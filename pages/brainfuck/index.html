@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="../../css/normalize.css">
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="../../css/cayman.css">
+  <!-- script src="../js/eruda.js"></script>
+  <script>eruda.init();</script -->
 <style type="text/css">
 .memory{
 display:inline-block;
@@ -44,7 +46,7 @@ width: 100%;
     </section>
 
     <section class="main-content">
-        <div class="memory">
+        <div id="wrapper" class="memory">
           <div id="box1" class="box">0</div>
           <div id="box2" class="box">0</div>
           <div id="box3" class="box">0</div>
@@ -116,9 +118,13 @@ function id($){
 
 function right(){
 if(id("box"+(pointer+2)) == undefined){
-      id("output").value += "\nError : Overflow!!! Stopped at memory " + pointer + " on program id " + pc;
-      error = true;
-      return ;
+      //id("output").value += "\nError : Overflow!!! Stopped at memory " + pointer + " on program id " + pc;
+      //error = true;
+      //return ;
+      var node = document.createElement("div");
+      node.className = "box";
+      node.id = "box"+(pointer+2);
+      id("wrapper").appendChild(node);
   }
   id("box"+(pointer+1)).style.background = "white";
   id("box"+(pointer+2)).style.background = color;
@@ -150,11 +156,14 @@ function parse(){
   program = bf(id("code").value);
 }
 function ok(){
+//console.log("Still running");
 if(status === "idle"){
   alert("Parse first!");
+  clearInterval(running);
   return ;
 }
 if(error){
+  clearInterval(running);
   return ;
 }
 
