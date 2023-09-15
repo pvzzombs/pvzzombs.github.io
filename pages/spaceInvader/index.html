@@ -10,45 +10,21 @@
   <script src="../js/p5.min.js"></script>
   <script src="../js/p5.collide2d.min.js"></script>
   <style type="text/css">
-    .lds-ring {
-      display: inline-block;
-      position: relative;
-      width: 80px;
-      height: 80px;
-    }
-    .lds-ring div {
-      box-sizing: border-box;
-      display: block;
-      position: absolute;
-      width: 64px;
-      height: 64px;
-      margin: 8px;
-      border: 8px solid #fff;
+    .loader {
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #b3b3b3;
       border-radius: 50%;
-      animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-      border-color: #fff transparent transparent transparent;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
     }
-    .lds-ring div:nth-child(1) {
-      animation-delay: -0.45s;
-    }
-    .lds-ring div:nth-child(2) {
-      animation-delay: -0.3s;
-    }
-    .lds-ring div:nth-child(3) {
-      animation-delay: -0.15s;
-    }
-    @keyframes lds-ring {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
+    @keyframes spin {
+      0% {transform: rotate(0deg);}
+      100% {transform: rotate(360deg);}
     }
   </style>
 </head>
 <body>
-<div id="p5_loading"><div class="lds-ring"><div></div><div></div><div></div><div></div></div></div>
 <script type="text/javascript">
 //basically load all sprites using objects
 var back = {
@@ -195,6 +171,8 @@ function mouseClicked(){
     </section>
 
     <section class="main-content">
+      <div id="p5_loading"><div class="loader"></div></div>
+      <!-- div class="loader"></div -->
       <ul>
         <div id="canvas"></div>
       </ul>
