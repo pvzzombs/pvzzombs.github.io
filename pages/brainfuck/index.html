@@ -111,6 +111,7 @@ var error = false;
 var speed = 50;
 var color = "#7CFF89";
 var status = "idle";
+var boxCount = 30;
 
 function id($){
   return document.getElementById($);
@@ -125,6 +126,7 @@ if(id("box"+(pointer+2)) == undefined){
       node.className = "box";
       node.id = "box"+(pointer+2);
       id("wrapper").appendChild(node);
+      boxCount++;
   }
   id("box"+(pointer+1)).style.background = "white";
   id("box"+(pointer+2)).style.background = color;
@@ -147,7 +149,7 @@ function parse(){
   pc = 0;
   error = false;
   clearInterval(running);
-  for(var i = 1; i <= 30; i++){
+  for(var i = 1; i <= boxCount; i++){
     id("box"+i).innerText = 0;
     id("box"+i).style.background = "white";
   }
