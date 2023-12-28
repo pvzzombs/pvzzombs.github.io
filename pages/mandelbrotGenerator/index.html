@@ -67,12 +67,16 @@
       <input type="button" id="trigger" value=" ? " onclick="about()"/>
       <br/>
       <br/>
-      x-axis: <input type="text" id="xa" value="-2.5"/>
+      <input type="checkbox" name="axis" id="flipImaginaryAxis" value="flipImaginaryAxis" onclick="flipImagAxis()" checked/>
+      <label for="flipImaginaryAxis">Flip Imaginary Axis</label>
+      <br/>
+      <br/>
+      top: <input type="text" id="xa" value="-2.5"/>
       <input type="button" id="xp" value="+" onclick="xScroll(1)"/>
       <input type="button" id="xm" value="-" onclick="xScroll(0)"/>
       <br/>
       <br/>
-      y-axis: <input type="text" id="ya" value="-2"/>
+      left: <input type="text" id="ya" value="-2"/>
       <input type="button" id="yp" value="+" onclick="yScroll(1)"/>
       <input type="button" id="ym" value="-" onclick="yScroll(0)"/>
       <br/>
@@ -98,7 +102,13 @@
       <input type="button" id="lrg" value="Change pallete" onclick="changePallete()"/>	
       <br />
       <br />
-      coloringType: <input type="button" id="clrt" value="smoothColoring" onclick="changeColoringType()"/>
+      coloringType:
+      <br />
+      <input type="radio" name="coloringType" id="smoothColoring" value="smoothColoring" onclick="changeColoringType(this)" checked/>
+      <label for="smoothColoring">Smooth Coloring</label>
+      <br />
+      <input type="radio" name="coloringType" id="escapeTime" value="escapeTime" onclick="changeColoringType(this)"/>
+      <label for="escapeTime">Escape Time</label>
       <br />
       <br />
       <p>update coords(Use space as delimiter): panX &lt;space&gt; panY &lt;space&gt; zoom &lt;space&gt; maxIterations</p>

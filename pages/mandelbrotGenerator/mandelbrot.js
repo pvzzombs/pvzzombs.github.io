@@ -4,6 +4,8 @@ var a, b, c, canvas, rect;
 var zoomOnClick = true;
 //flag to tell whether to use setInterval or not
 var useInterval = true;
+//flip imaginary axis (-1 means true, 1 is default)
+var flipImaginaryAxis = 1;
 //Sizes of pixel
 var pixelSizes = [8, 5, 1];
 //Use to store setTimeout IDs for calling mandelbrot();
@@ -37,7 +39,7 @@ function drawOnClick(e) {
   var mouseY = (e.clientY - rect.top);
   if(zoomOnClick) {
     var mx = panX + mouseX / zooms;
-    var my = panY + mouseY / zooms;
+    var my = panY + flipImaginaryAxis * (mouseY / zooms);
     //console.log(mx, my);
     //var widthX = panX + a/zooms;
     //var heightY = panY + b/zooms;
@@ -45,7 +47,7 @@ function drawOnClick(e) {
     //console.log(e.clientX, e.clientY);
     zooms *= zf;
     panX = mx - ((e.clientX - rect.left) / zooms);
-    panY = my - ((e.clientY - rect.top) / zooms);
+    panY = my - flipImaginaryAxis * ((e.clientY - rect.top) / zooms);
     /*panX = (mx * 2) - widthX;
     panY = (my * 2) - heightY;
     console.log("Selection x: " + mx + ", Selection y: " + my);
@@ -55,10 +57,10 @@ function drawOnClick(e) {
     console.log("End y: " + (panY + b/zooms));*/
   } else {
     var mx = panX + mouseX / zooms;
-    var my = panY + mouseY / zooms;
+    var my = panY + flipImaginaryAxis * (mouseY / zooms);
     zooms /= zf;
     panX = mx - ((e.clientX - rect.left) / zooms);
-    panY = my - ((e.clientY - rect.top) / zooms);
+    panY = my - flipImaginaryAxis * ((e.clientY - rect.top) / zooms);
   }
   pan = (panX + 2 / zooms) - (panX - 1 / zooms);
   document.getElementById("xa").value = panX;
@@ -135,7 +137,7 @@ function mdbl(px, py, x, y, zm, panX, panY, scale) {
   for(py = 0; py < b; py += scale) {
     //zoom factors
     x0 = panX + px / zm;
-    y0 = panY + py / zm;
+    y0 = panY + flipImaginaryAxis * (py / zm);
     var x = 0;
     var y = 0;
     var i = 0;
@@ -245,23 +247,44 @@ function interpolation(iteration) {
 }
 //reset
 function work() {
+  flipImaginaryAxis = 1;
+  document.getElementById("flipImaginaryAxis").checked = true;
   document.getElementById("xa").value = -2.5;
-  document.getElementById("ya").value = -2;
+  document.getElementById("ya").value = -2 * flipImaginaryAxis;
   document.getElementById("za").value = a / 4;
   pan = 0.1;
   zooms = a / 4;
   panX = -2.5;
-  panY = -2.0;
+  panY = -2.0 * flipImaginaryAxis;
   zf = 1.5;
   maxI = 50;
   pallete.setSpectrum("#000764", "#206bcb", "#edffff", "#ffaa00", "#000200");
   pallete.setNumberRange(0, maxI);
   _pallete = ["#000764", "#206bcb", "#edffff", "#ffaa00", "#000200"];
   coloringType = "smoothColoring";
-  document.getElementById("clrt").value = coloringType;
+  document.getElementById(coloringType).checked = true;
   show();
   abortRun();
   startRun();
+}
+//flip imaginary axis
+function flipImagAxis(){
+  flipImaginaryAxis = flipImaginaryAxis == 1 ? -1 : 1;
+  panY = panY * -1;
+  document.getElementById("ya").value = panY;
+  show();
+  abortRun();
+  startRun();
+  /*switch(flipImaginaryAxis){
+    case 1:
+      document.getElementById("flipImaginaryAxis").checked = true;
+      break;
+    case -1:
+      document.getElementById("flipImaginaryAxis").checked = false;
+      break;
+    default:
+      document.getElementById("flipImaginaryAxis").checked = true;
+  }*/
 }
 //left to right scroll adjustment
 function xScroll(n) {
@@ -345,18 +368,18 @@ function changeMaxI() {
   startRun();
 }
 //changes coloringType
-function changeColoringType() {
-  var temp;
-  switch(coloringType) {
+function changeColoringType(obj) {
+  var temp = obj.value;
+  /*switch(coloringType) {
     case "smoothColoring":
       temp = "escapeTime";
       break;
     case "escapeTime":
       temp = "smoothColoring";
       break;
-  }
+  }*/
   coloringType = temp;
-  document.getElementById("clrt").value = temp;
+  //document.getElementById("clrt").value = temp;
   show();
   abortRun();
   startRun();
@@ -405,7 +428,15 @@ function resize() {
 }
 //show details
 function show() {
-  var temp = "Scroll: " + pan + "<br /> Current zoom: " + zooms + "<br /> topLeftX: " + panX + "<br /> topRightY: " + panY + "<br /> zoom factor: " + zf + "<br /> max iterations of loop: " + maxI + "<br /> uses " + coloringType + " algorithm for coloring";
+  var temp = "Scroll: " + pan
+  + "<br /> Current zoom: " + zooms
+  + "<br /> left: " + panX
+  + "<br /> right: " + (panX + a/zooms)
+  + "<br /> top: " + panY
+  + "<br /> bottom: " + (panY + flipImaginaryAxis * (b/zooms))
+  + "<br /> zoom factor: " + zf
+  + "<br /> max iterations of loop: " + maxI
+  + "<br /> uses " + coloringType + " algorithm for coloring";
   document.getElementById("dtls").innerHTML = temp;
 }
 /*favorable zoom
