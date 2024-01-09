@@ -27,9 +27,6 @@ a = canvas.width;
 b = canvas.height;
 //when canvas is clicked, call drawOnClick function
 canvas.onclick = function(e) {
-  /*setTimeout(function(){
-	drawOnClick(e);
-  }, 10)*/
   drawOnClick(e);
 }
 //changes the mandelbrot set based on mouse clicks
@@ -40,21 +37,9 @@ function drawOnClick(e) {
   if(zoomOnClick) {
     var mx = panX + mouseX / zooms;
     var my = panY + flipImaginaryAxis * (mouseY / zooms);
-    //console.log(mx, my);
-    //var widthX = panX + a/zooms;
-    //var heightY = panY + b/zooms;
-    //console.log(a/zooms);
-    //console.log(e.clientX, e.clientY);
     zooms *= zf;
     panX = mx - ((e.clientX - rect.left) / zooms);
     panY = my - flipImaginaryAxis * ((e.clientY - rect.top) / zooms);
-    /*panX = (mx * 2) - widthX;
-    panY = (my * 2) - heightY;
-    console.log("Selection x: " + mx + ", Selection y: " + my);
-    console.log("Start x: " + panX + ", Start y: " + panY);
-    console.log("Width x: " + widthX + ", Height y: " + heightY);
-    console.log("End x: " + (panX + a/zooms));
-    console.log("End y: " + (panY + b/zooms));*/
   } else {
     var mx = panX + mouseX / zooms;
     var my = panY + flipImaginaryAxis * (mouseY / zooms);
@@ -97,13 +82,6 @@ function abortRun() {
 }
 //starts calling mandelbrot
 function startRun() {
-  /*mdb1 = setTimeout(function(){mandelbrot(zooms, panX, panY, 8, 0, function(){
-    mdb2 = setTimeout(function(){mandelbrot(zooms, panX, panY, 5, 1, function(){
-      mdb3 = setTimeout(function(){mandelbrot(zooms, panX, panY, 1, 2, function(){
-        console.log("Done...");
-      })});
-    })});
-  })});*/
   function mandelbrotCallFactory(i){
     return function(){
       mandelbrot(zooms, panX, panY, pixelSizes[i], i);
@@ -133,7 +111,7 @@ pallete.setNumberRange(0, maxI);
 //pallete for smoothColoring
 var _pallete = ["#000764", "#206bcb", "#edffff", "#ffaa00", "#000200"];
 // mandelbrot helper function
-function mdbl(px, py, x, y, zm, panX, panY, scale) {
+function mdbl(px, py, x, y, zm, panX, panY, scale, func) {
   for(py = 0; py < b; py += scale) {
     //zoom factors
     x0 = panX + px / zm;
@@ -143,28 +121,13 @@ function mdbl(px, py, x, y, zm, panX, panY, scale) {
     var i = 0;
     var xtemp;
     while(x * x + y * y <= 4 && i < maxI) {
-      //ticks++
       xtemp = x * x - y * y + x0
       y = 2 * x * y + y0
       x = xtemp
       i = i + 1
     }
     //coloring
-    if("smoothColoring" === coloringType) {
-      if(i < maxI) {
-        log_zn = Math.log(x * x + y * y) / 2
-        nu = Math.log(log_zn / Math.log(2)) / Math.log(2);
-        i = i + 1 - nu;
-        c.fillStyle = color(i / maxI * (_pallete.length - 1));
-        c.fillRect(px, py, scale, scale);
-      } else {
-        c.fillStyle = "black";
-        c.fillRect(px, py, scale, scale);
-      }
-    } else {
-      c.fillStyle = color(i);
-      c.fillRect(px, py, scale, scale);
-    }
+    func(px, py, x, y, i, scale);
   }
 }
 //function that draws the mandelbrot set
@@ -175,8 +138,6 @@ function mandelbrot(zm, panX, panY, scale, arrayIndex) {
   //console.log("arrayIndex is " + arrayIndex);
   //cancel run in some case
   scale = scale || 1;
-  //reset ticks
-  ticks = 0;
   //func = func || (function() {});
   //px - Canvas x
   //py - canvas y
@@ -187,7 +148,7 @@ function mandelbrot(zm, panX, panY, scale, arrayIndex) {
   if(useInterval){
     drawColumnIDs[arrayIndex] = setInterval(function(){
       if(px < a){
-        mdbl(px, py, x, y, zm, panX, panY, scale);
+        mdbl(px, py, x, y, zm, panX, panY, scale, coloringMethod);
         px += scale;
       }else{
         clearInterval(drawColumnIDs[arrayIndex]);
@@ -196,7 +157,7 @@ function mandelbrot(zm, panX, panY, scale, arrayIndex) {
   }else{
     function drawStep() {
       if(px < a) {
-        mdbl(px, py, x, y, zm, panX, panY, scale);
+        mdbl(px, py, x, y, zm, panX, panY, scale, coloringMethod);
         px += scale;
         drawColumnIDs[arrayIndex] = requestAnimationFrame(drawStep);
       } else {
@@ -205,7 +166,24 @@ function mandelbrot(zm, panX, panY, scale, arrayIndex) {
     }
     drawColumnIDs[arrayIndex] = requestAnimationFrame(drawStep);
   }
-  //console.log("Total ticks: " + ticks + ", based on scale " + scale);
+}
+
+function coloringMethod(px, py, x, y, i, scale){
+  if("smoothColoring" === coloringType) {
+    if(i < maxI) {
+      log_zn = Math.log(x * x + y * y) / 2
+      nu = Math.log(log_zn / Math.log(2)) / Math.log(2);
+      i = i + 1 - nu;
+      c.fillStyle = color(i / maxI * (_pallete.length - 1));
+      c.fillRect(px, py, scale, scale);
+    } else {
+      c.fillStyle = "black";
+      c.fillRect(px, py, scale, scale);
+    }
+  } else {
+    c.fillStyle = color(i);
+    c.fillRect(px, py, scale, scale);
+  }
 }
 /******************************************************************/
 /******************************************************************/
@@ -275,16 +253,6 @@ function flipImagAxis(){
   show();
   abortRun();
   startRun();
-  /*switch(flipImaginaryAxis){
-    case 1:
-      document.getElementById("flipImaginaryAxis").checked = true;
-      break;
-    case -1:
-      document.getElementById("flipImaginaryAxis").checked = false;
-      break;
-    default:
-      document.getElementById("flipImaginaryAxis").checked = true;
-  }*/
 }
 //left to right scroll adjustment
 function xScroll(n) {
@@ -315,14 +283,6 @@ function drawAgain() {
 }
 //the change zoom function
 function zoom() {
-  //NOT YET
-  /*var rect = canvas.getBoundingClientRect();
-    var mx = panX + (panX - rect.left) / zooms;
-    var my = panY + (panY - rect.top) / zooms;
-    zooms = document.getElementById("za");
-    panX = mx - ((panX - rect.left) / zooms);
-    panY = my - ((panY - rect.top) / zooms);
-  */
   zooms = document.getElementById("za").value;
   mx = ((panX + (a - 1) / zooms) - panX) / 2;
   panX -= mx;
@@ -370,16 +330,7 @@ function changeMaxI() {
 //changes coloringType
 function changeColoringType(obj) {
   var temp = obj.value;
-  /*switch(coloringType) {
-    case "smoothColoring":
-      temp = "escapeTime";
-      break;
-    case "escapeTime":
-      temp = "smoothColoring";
-      break;
-  }*/
   coloringType = temp;
-  //document.getElementById("clrt").value = temp;
   show();
   abortRun();
   startRun();
