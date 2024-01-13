@@ -59,8 +59,14 @@
       <div id="canvasWrapper">
         <canvas id="paper"></canvas>
       </div>
-      <input type="button" id="trigger" value="+" onclick="plus()"/>
-      <input type="button" id="trigger" value="-" onclick="minus()"/>
+      <h3>On click:</h3>
+      <input type="radio" name="zoomType" id="zoomIn" value="zoomIn" onclick="plus()" checked/>
+      <label for="zoomIn">Zoom in</label>
+      <br />
+      <input type="radio" name="zoomType" id="zoomOut" value="zoomOut" onclick="minus()"/>
+      <label for="zoomOut">Zoom out</label>
+      <br />
+      <br />
       <input type="button" id="trigger" value="RESET" onclick="work()"/>
       <input type="button" id="trigger" value="Re-draw" onclick="drawAgain()"/>
       <input type="button" id="trigger" value="Resize" onclick="resize()"/>
@@ -96,14 +102,12 @@
       <input type="button" id="trigger" value="Change" onclick="changeMaxI()"/>
       <br />
       <br />
-      pallete(Use space as delimiter):
-      <br/>
+      <h3>Pallete (use space as delimiter):</h3>
       <textarea id="plt" width="150">red orange yellow black</textarea>
       <input type="button" id="lrg" value="Change pallete" onclick="changePallete()"/>	
       <br />
       <br />
-      coloringType:
-      <br />
+      <h3>Coloring type:</h3>
       <input type="radio" name="coloringType" id="smoothColoring" value="smoothColoring" onclick="changeColoringType(this)" checked/>
       <label for="smoothColoring">Smooth Coloring</label>
       <br />
@@ -115,7 +119,7 @@
       <textarea id="crd" width="150">-0.7253464660778749 0.2520240908085526 18892488895.231102 2500</textarea>
       <input type="button" id="lrg" value="Update Coords" onclick="changeCoords()"/>
       <br />
-      <p> Advance Details: </p>
+      <h3> Advance Details: </h3>
       <div id="dtls">
       Start by clicking the reset button.<br />
       Available palletes: <br />

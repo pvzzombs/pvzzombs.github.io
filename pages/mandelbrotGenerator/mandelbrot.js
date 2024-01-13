@@ -1,5 +1,5 @@
 //Create the canvas, then collect the height and width
-var a, b, c, canvas, rect;
+var canvasWidth, canvasHeight, canvasContext, canvas, rect;
 //zoomon click
 var zoomOnClick = true;
 //flag to tell whether to use setInterval or not
@@ -22,9 +22,9 @@ canvas.width = canvasWrapper.clientWidth;
 //the canvas is square
 canvas.height = canvasWrapper.clientWidth;
 
-c = canvas.getContext("2d");
-a = canvas.width;
-b = canvas.height;
+canvasContext = canvas.getContext("2d");
+canvasWidth = canvas.width;
+canvasHeight = canvas.height;
 //when canvas is clicked, call drawOnClick function
 canvas.onclick = function(e) {
   drawOnClick(e);
@@ -112,7 +112,7 @@ pallete.setNumberRange(0, maxI);
 var _pallete = ["#000764", "#206bcb", "#edffff", "#ffaa00", "#000200"];
 // mandelbrot helper function
 function mdbl(px, py, x, y, zm, panX, panY, scale, func) {
-  for(py = 0; py < b; py += scale) {
+  for(py = 0; py < canvasHeight; py += scale) {
     //zoom factors
     x0 = panX + px / zm;
     y0 = panY + flipImaginaryAxis * (py / zm);
@@ -130,15 +130,9 @@ function mdbl(px, py, x, y, zm, panX, panY, scale, func) {
     func(px, py, x, y, i, scale);
   }
 }
-//function that draws the mandelbrot set
-// based on current zoom, panX, panY and scale
-/***********************MANDELBROT*********************************/
-/******************************************************************/
+
 function mandelbrot(zm, panX, panY, scale, arrayIndex) {
-  //console.log("arrayIndex is " + arrayIndex);
-  //cancel run in some case
   scale = scale || 1;
-  //func = func || (function() {});
   //px - Canvas x
   //py - canvas y
   //x - real x
@@ -147,7 +141,7 @@ function mandelbrot(zm, panX, panY, scale, arrayIndex) {
   px = 0;
   if(useInterval){
     drawColumnIDs[arrayIndex] = setInterval(function(){
-      if(px < a){
+      if(px < canvasWidth){
         mdbl(px, py, x, y, zm, panX, panY, scale, coloringMethod);
         px += scale;
       }else{
@@ -156,7 +150,7 @@ function mandelbrot(zm, panX, panY, scale, arrayIndex) {
     });
   }else{
     function drawStep() {
-      if(px < a) {
+      if(px < canvasWidth) {
         mdbl(px, py, x, y, zm, panX, panY, scale, coloringMethod);
         px += scale;
         drawColumnIDs[arrayIndex] = requestAnimationFrame(drawStep);
@@ -174,20 +168,20 @@ function coloringMethod(px, py, x, y, i, scale){
       log_zn = Math.log(x * x + y * y) / 2
       nu = Math.log(log_zn / Math.log(2)) / Math.log(2);
       i = i + 1 - nu;
-      c.fillStyle = color(i / maxI * (_pallete.length - 1));
-      c.fillRect(px, py, scale, scale);
+      canvasContext.fillStyle = color(i / maxI * (_pallete.length - 1));
+      canvasContext.fillRect(px, py, scale, scale);
     } else {
-      c.fillStyle = "black";
-      c.fillRect(px, py, scale, scale);
+      canvasContext.fillStyle = "black";
+      canvasContext.fillRect(px, py, scale, scale);
     }
   } else {
-    c.fillStyle = color(i);
-    c.fillRect(px, py, scale, scale);
+    canvasContext.fillStyle = color(i);
+    canvasContext.fillRect(px, py, scale, scale);
   }
 }
 /******************************************************************/
 /******************************************************************/
-function color(num, x, y) {
+function color(num) {
   switch(coloringType) {
     case "escapeTime":
       var selection = pallete.colourAt(num);
@@ -226,12 +220,8 @@ function interpolation(iteration) {
 //reset
 function work() {
   flipImaginaryAxis = 1;
-  document.getElementById("flipImaginaryAxis").checked = true;
-  document.getElementById("xa").value = -2.5;
-  document.getElementById("ya").value = -2 * flipImaginaryAxis;
-  document.getElementById("za").value = a / 4;
   pan = 0.1;
-  zooms = a / 4;
+  zooms = canvasWidth / 4;
   panX = -2.5;
   panY = -2.0 * flipImaginaryAxis;
   zf = 1.5;
@@ -241,6 +231,10 @@ function work() {
   _pallete = ["#000764", "#206bcb", "#edffff", "#ffaa00", "#000200"];
   coloringType = "smoothColoring";
   document.getElementById(coloringType).checked = true;
+  document.getElementById("flipImaginaryAxis").checked = true;
+  document.getElementById("xa").value = panX;
+  document.getElementById("ya").value = panY;
+  document.getElementById("za").value = zooms;
   show();
   abortRun();
   startRun();
@@ -284,9 +278,9 @@ function drawAgain() {
 //the change zoom function
 function zoom() {
   zooms = document.getElementById("za").value;
-  mx = ((panX + (a - 1) / zooms) - panX) / 2;
+  mx = ((panX + (canvasWidth - 1) / zooms) - panX) / 2;
   panX -= mx;
-  my = ((panY + (b - 1) / zooms) - panY) / 2;
+  my = ((panY + (canvasHeight - 1) / zooms) - panY) / 2;
   panY -= mx;
   show();
   abortRun();
@@ -373,8 +367,8 @@ function changeCoords() {
 }
 //resize canvas
 function resize() {
-  a = canvas.width = parseInt(prompt("Please enter canvas width in pixels", 200)) || 200;
-  b = canvas.height = parseInt(prompt("Please enter canvas height in pixels", 200)) || 200;
+  canvasWidth = canvas.width = parseInt(prompt("Please enter canvas width in pixels", 200)) || 200;
+  canvasHeight = canvas.height = parseInt(prompt("Please enter canvas height in pixels", 200)) || 200;
   work();
 }
 //show details
@@ -382,9 +376,9 @@ function show() {
   var temp = "Scroll: " + pan
   + "<br /> Current zoom: " + zooms
   + "<br /> left: " + panX
-  + "<br /> right: " + (panX + a/zooms)
+  + "<br /> right: " + (panX + canvasWidth/zooms)
   + "<br /> top: " + panY
-  + "<br /> bottom: " + (panY + flipImaginaryAxis * (b/zooms))
+  + "<br /> bottom: " + (panY + flipImaginaryAxis * (canvasHeight/zooms))
   + "<br /> zoom factor: " + zf
   + "<br /> max iterations of loop: " + maxI
   + "<br /> uses " + coloringType + " algorithm for coloring";
