@@ -26,7 +26,7 @@ canvasContext = canvas.getContext("2d");
 canvasWidth = canvas.width;
 canvasHeight = canvas.height;
 //when canvas is clicked, call drawOnClick function
-canvas.onclick = function(e) {
+canvas.onclick = function (e) {
   drawOnClick(e);
 }
 //changes the mandelbrot set based on mouse clicks
@@ -34,7 +34,7 @@ function drawOnClick(e) {
   rect = canvas.getBoundingClientRect()
   var mouseX = (e.clientX - rect.left);
   var mouseY = (e.clientY - rect.top);
-  if(zoomOnClick) {
+  if (zoomOnClick) {
     var mx = panX + mouseX / zooms;
     var my = panY + flipImaginaryAxis * (mouseY / zooms);
     zooms *= zf;
@@ -52,7 +52,7 @@ function drawOnClick(e) {
   document.getElementById("ya").value = panY;
   document.getElementById("za").value = zooms;
   pallete.setNumberRange(0, maxI);
-  
+
   show();
   abortRun();
   startRun();
@@ -67,27 +67,27 @@ function minus() {
 }
 //aborts startRun
 function abortRun() {
-  for(var i=0; i<mandelbrotCalls.length; i++){
+  for (var i = 0; i < mandelbrotCalls.length; i++) {
     clearTimeout(mandelbrotCalls[i]);
   }
-  if(useInterval) {
-    for(var i=0; i<drawColumnIDs.length; i++){
+  if (useInterval) {
+    for (var i = 0; i < drawColumnIDs.length; i++) {
       clearInterval(drawColumnIDs[i]);
     }
-  }else{
-    for(var i=0; i<drawColumnIDs.length; i++){
+  } else {
+    for (var i = 0; i < drawColumnIDs.length; i++) {
       cancelAnimationFrame(drawColumnIDs[i]);
     }
   }
 }
 //starts calling mandelbrot
 function startRun() {
-  function mandelbrotCallFactory(i){
-    return function(){
+  function mandelbrotCallFactory(i) {
+    return function () {
       mandelbrot(zooms, panX, panY, pixelSizes[i], i);
     }
   }
-  for(var i=0; i<pixelSizes.length; i++){
+  for (var i = 0; i < pixelSizes.length; i++) {
     mandelbrotCalls[i] = setTimeout(mandelbrotCallFactory(i));
     //console.log(i);
   }
@@ -112,7 +112,7 @@ pallete.setNumberRange(0, maxI);
 var _pallete = ["#000764", "#206bcb", "#edffff", "#ffaa00", "#000200"];
 // mandelbrot helper function
 function mdbl(px, py, x, y, zm, panX, panY, scale, func) {
-  for(py = 0; py < canvasHeight; py += scale) {
+  for (py = 0; py < canvasHeight; py += scale) {
     //zoom factors
     x0 = panX + px / zm;
     y0 = panY + flipImaginaryAxis * (py / zm);
@@ -120,7 +120,7 @@ function mdbl(px, py, x, y, zm, panX, panY, scale, func) {
     var y = 0;
     var i = 0;
     var xtemp;
-    while(x * x + y * y <= 4 && i < maxI) {
+    while (x * x + y * y <= 4 && i < maxI) {
       xtemp = x * x - y * y + x0
       y = 2 * x * y + y0
       x = xtemp
@@ -139,18 +139,18 @@ function mandelbrot(zm, panX, panY, scale, arrayIndex) {
   //y - imaginary y
   var px, py, x, y;
   px = 0;
-  if(useInterval){
-    drawColumnIDs[arrayIndex] = setInterval(function(){
-      if(px < canvasWidth){
+  if (useInterval) {
+    drawColumnIDs[arrayIndex] = setInterval(function () {
+      if (px < canvasWidth) {
         mdbl(px, py, x, y, zm, panX, panY, scale, coloringMethod);
         px += scale;
-      }else{
+      } else {
         clearInterval(drawColumnIDs[arrayIndex]);
       }
     });
-  }else{
+  } else {
     function drawStep() {
-      if(px < canvasWidth) {
+      if (px < canvasWidth) {
         mdbl(px, py, x, y, zm, panX, panY, scale, coloringMethod);
         px += scale;
         drawColumnIDs[arrayIndex] = requestAnimationFrame(drawStep);
@@ -162,9 +162,9 @@ function mandelbrot(zm, panX, panY, scale, arrayIndex) {
   }
 }
 
-function coloringMethod(px, py, x, y, i, scale){
-  if("smoothColoring" === coloringType) {
-    if(i < maxI) {
+function coloringMethod(px, py, x, y, i, scale) {
+  if ("smoothColoring" === coloringType) {
+    if (i < maxI) {
       log_zn = Math.log(x * x + y * y) / 2
       nu = Math.log(log_zn / Math.log(2)) / Math.log(2);
       i = i + 1 - nu;
@@ -182,7 +182,7 @@ function coloringMethod(px, py, x, y, i, scale){
 /******************************************************************/
 /******************************************************************/
 function color(num) {
-  switch(coloringType) {
+  switch (coloringType) {
     case "escapeTime":
       var selection = pallete.colourAt(num);
       return "#" + selection;
@@ -240,7 +240,7 @@ function work() {
   startRun();
 }
 //flip imaginary axis
-function flipImagAxis(){
+function flipImagAxis() {
   flipImaginaryAxis = flipImaginaryAxis == 1 ? -1 : 1;
   panY = panY * -1;
   document.getElementById("ya").value = panY;
@@ -332,7 +332,7 @@ function changeColoringType(obj) {
 //adjust pallete
 function changePallete() {
   var temp = (document.getElementById("plt").value).split(" ");
-  if(temp.length < 3) {
+  if (temp.length < 3) {
     alert(" Please enter more colors ");
     return
   }
@@ -344,7 +344,7 @@ function changePallete() {
 //updateCoords
 function changeCoords() {
   var temp = (document.getElementById("crd").value).split(" ");
-  if(temp.length < 4) {
+  if (temp.length < 4) {
     alert(" Please enter complete details");
     return
   }
@@ -354,7 +354,7 @@ function changeCoords() {
   maxI = parseFloat(temp[3]);
   zf = 1.5;
   pan = (panX + 2 / zooms) - (panX - 1 / zooms);
-  
+
   pallete.setNumberRange(0, maxI);
   document.getElementById("xa").value = panX;
   document.getElementById("ya").value = panY;
@@ -373,15 +373,15 @@ function resize() {
 }
 //show details
 function show() {
-  var temp = "Scroll: " + pan
-  + "<br /> Current zoom: " + zooms
-  + "<br /> left: " + panX
-  + "<br /> right: " + (panX + canvasWidth/zooms)
-  + "<br /> top: " + panY
-  + "<br /> bottom: " + (panY + flipImaginaryAxis * (canvasHeight/zooms))
-  + "<br /> zoom factor: " + zf
-  + "<br /> max iterations of loop: " + maxI
-  + "<br /> uses " + coloringType + " algorithm for coloring";
+  var temp = "Scroll: " + pan +
+    "<br /> Current zoom: " + zooms +
+    "<br /> left: " + panX +
+    "<br /> right: " + (panX + canvasWidth / zooms) +
+    "<br /> top: " + panY +
+    "<br /> bottom: " + (panY + flipImaginaryAxis * (canvasHeight / zooms)) +
+    "<br /> zoom factor: " + zf +
+    "<br /> max iterations of loop: " + maxI +
+    "<br /> uses " + coloringType + " algorithm for coloring";
   document.getElementById("dtls").innerHTML = temp;
 }
 /*favorable zoom
