@@ -67,6 +67,7 @@
       <label for="zoomOut">Zoom out</label>
       <br />
       <br />
+      <input type="button" id="trigger" value="Full" onclick="fullResize()"/>
       <input type="button" id="trigger" value="RESET" onclick="work()"/>
       <input type="button" id="trigger" value="Re-draw" onclick="drawAgain()"/>
       <input type="button" id="trigger" value="Resize" onclick="resize()"/>
@@ -77,6 +78,9 @@
       <label for="flipImaginaryAxis">Flip Imaginary Axis</label>
       <br/>
       <br/>
+      <input type="button" id="trigger" value="Reset coordinates" onclick="resetCoordinates()"/>
+      <br />
+      <br />
       top: <input type="text" id="xa" value="-2.5"/>
       <input type="button" id="xp" value="+" onclick="xScroll(1)"/>
       <input type="button" id="xm" value="-" onclick="xScroll(0)"/>
@@ -115,7 +119,7 @@
       <label for="escapeTime">Escape Time</label>
       <br />
       <br />
-      <p>update coords(Use space as delimiter): panX &lt;space&gt; panY &lt;space&gt; zoom &lt;space&gt; maxIterations</p>
+      <h3>Update coords (Use space as delimiter):</h3> <p>panX &lt;space&gt; panY &lt;space&gt; zoom &lt;space&gt; maxIterations</p>
       <textarea id="crd" width="150">-0.7253464660778749 0.2520240908085526 18892488895.231102 2500</textarea>
       <input type="button" id="lrg" value="Update Coords" onclick="changeCoords()"/>
       <br />
@@ -128,7 +132,6 @@
       white black white black<br />
       </div>
       <br />
-      <p style="font-size: 10px">pvzzombs 2019</p>
       <footer class="site-footer">
         <span class="site-footer-owner">Miles Jamon (c) 2019 - <span id="yearToday"></span></span>
         <script>document.getElementById("yearToday").innerText = (new Date()).getFullYear();</script>

@@ -239,6 +239,19 @@ function work() {
   abortRun();
   startRun();
 }
+//reset coordinates
+function resetCoordinates() {
+  pan = 0.1;
+  zooms = canvasWidth / 4;
+  panX = -2.5;
+  panY = -2.0 * flipImaginaryAxis;
+  document.getElementById("xa").value = panX;
+  document.getElementById("ya").value = panY;
+  document.getElementById("za").value = zooms;
+  show();
+  abortRun();
+  startRun();
+}
 //flip imaginary axis
 function flipImagAxis() {
   flipImaginaryAxis = flipImaginaryAxis == 1 ? -1 : 1;
@@ -365,6 +378,8 @@ function changeCoords() {
   abortRun();
   startRun();
 }
+//to be done
+function fullResize() {}
 //resize canvas
 function resize() {
   canvasWidth = canvas.width = parseInt(prompt("Please enter canvas width in pixels", 200)) || 200;
