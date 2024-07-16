@@ -1,0 +1,1 @@
+var playerSprite,pipesSprites,backgroundSprite,lastTime,nowTime,dt,fpm,sfx_die,sfx_hit,sfx_point,sfx_wing,mainFont,birdDeathX,birdDeathY,mgr,gravity=.3,flap=-6,speed=2,birdPos={x:0,y:0},pipesPos=[{x:0,y:0,height:0},{x:0,y:0,height:0},{x:0,y:0,height:0}],score=0,highScore=0,speedUp=0;
