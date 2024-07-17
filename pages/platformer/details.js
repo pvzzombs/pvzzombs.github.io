@@ -1,0 +1,1 @@
+function Details(){this.tileSize=20,this.bushes=[];for(var i=0;i<20;i++){var t=20*random(-50,100);console.log(t),this.bushes.push({x:t,y:worldHeight-this.tileSize})}console.log(this)}Details.prototype={drawDelta:function(i,t){for(var e=0;e<this.bushes.length;e++){var s=this.bushes[e];worldSprite.drawP5Image(s.x+i,s.y+t,this.tileSize,this.tileSize,96,96,16,16)}}};
