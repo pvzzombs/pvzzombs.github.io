@@ -1,0 +1,1 @@
+function Collider(){this.arr=[]}Collider.prototype={update:function(){for(var r=0;r<this.arr.length;r++){var e=this.arr[r];if(collideRectRect(player.x+player.vx,player.y+player.vy,player.width,player.height,e.x,e.y,worldLoader.tileSize,worldLoader.tileSize))return 0!=player.vx&&(player.vx=0),void(0!=player.vy&&(player.vy=0))}}};
